@@ -10,7 +10,7 @@ void main() {
   BasicMessageChannelExample.setMessageHandler();
   runApp(const MyApp());
   // startTicker();
-  startTimer();
+  // startTimer();
 
 }
 
@@ -22,7 +22,7 @@ void startTimer() {
     (Timer t) {
       // 定时执行的任务
       print('定时器触发: ${DateTime.now()}');
-      BasicMessageChannelExample.sendMessage("Hello from Flutter").then((reply) {
+      BasicMessageChannelExample.sendMessage("Hello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from FlutterHello from Flutter").then((reply) {
         print("iOS 回复: $reply");
       });
     },
