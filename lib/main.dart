@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  // 关键：初始化绑定
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  BasicMessageChannelExample.setMessageHandler();
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -55,6 +62,10 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
+      // 发送消息到 iOS
+      BasicMessageChannelExample.sendMessage("Hello from Flutter").then((reply) {
+        print("iOS 回复: $reply");
+      });
     });
   }
 
@@ -106,5 +117,32 @@ class _MyHomePageState extends State<MyHomePage> {
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+}
+
+class BasicMessageChannelExample {
+  // 1. 创建 BasicMessageChannel（通道名称与原生端一致）
+  static const _channel = BasicMessageChannel<String>(
+    'com.example/basic_message_channel',
+    StringCodec(), // 使用字符串编解码器
+  );
+
+  // 2. 发送消息到 iOS 并接收回复
+  static Future<String?> sendMessage(String message) async {
+    try {
+      final String? reply = await _channel.send(message);
+      return reply;
+    } on PlatformException catch (e) {
+      print("通信失败: ${e.message}");
+      return "Error";
+    }
+  }
+
+  // 3. 设置消息接收处理器（可选，用于接收 iOS 主动发送的消息）
+  static void setMessageHandler() {
+    _channel.setMessageHandler((message) async {
+      print("收到 iOS 消息: $message");
+      return "Flutter 已收到"; // 返回响应给 iOS
+    });
   }
 }
