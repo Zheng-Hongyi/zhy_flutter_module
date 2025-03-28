@@ -1,12 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/scheduler.dart';
+import 'dart:async';
 
 void main() {
   // 关键：初始化绑定
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   BasicMessageChannelExample.setMessageHandler();
   runApp(const MyApp());
+  // startTicker();
+  startTimer();
+
+}
+
+void startTimer() {
+  Timer? timer; // 保存定时器引用以便取消
+
+  timer = Timer.periodic(
+    const Duration(milliseconds: 100), // 0.1秒
+    (Timer t) {
+      // 定时执行的任务
+      print('定时器触发: ${DateTime.now()}');
+      BasicMessageChannelExample.sendMessage("Hello from Flutter").then((reply) {
+        print("iOS 回复: $reply");
+      });
+    },
+  );
+
+  // 若要停止定时器（如页面销毁时）
+  // timer?.cancel();
+}
+
+void startTicker() {
+  Ticker? ticker;
+  int tickCount = 0;
+
+  ticker = Ticker((elapsed) {
+    tickCount++;
+    print('Ticker 触发: $tickCount 次');
+    BasicMessageChannelExample.sendMessage("Hello from Flutter").then((reply) {
+        print("iOS 回复: $reply");
+      });
+  });
+
+  ticker.start(); // 启动
+
+  // 若要停止（如页面销毁时）
+  // ticker.dispose();
 }
 
 class MyApp extends StatelessWidget {
